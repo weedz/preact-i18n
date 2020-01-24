@@ -1,0 +1,29 @@
+{
+  "name": "preact-i18n",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weedz/preact-i18n.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/weedz/preact-i18n/issues"
+  },
+  "homepage": "https://github.com/weedz/preact-i18n#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "preact": "^10.2.1"
+  },
+  "peerDependenciesMeta": {
+    "preact": {
+      "optional": true
+    }
+  }
+}
