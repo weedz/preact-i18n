@@ -16,11 +16,15 @@ export default {
 }
 
 // App.js
-import connectLanguage, { localize, changeLanguage } from 'preact-i18n';
+import connectLanguage, { localize, changeLanguage } from "preact-i18n-weedz";
 
 const locales = localize({
-    "en": () => [import('./en.js')],
-    "sv": () => [import('./sv.js')]
+    "en": () => [import("./en.js")],
+    "sv": () => [import("./sv.js")],
+    // this also works
+    // "en": () => [{
+    //     "string-id": "EN"
+    // }]
 });
 
 function wrapper(child) {
