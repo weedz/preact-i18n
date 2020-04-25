@@ -2,7 +2,7 @@
   "name": "preact-i18n-weedz",
   "version": "1.0.0",
   "description": "",
-  "source": "src/index.js",
+  "source": "src/index.tsx",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "files": [
@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "microbundle src/index.js -o dist/index.js --external react,preact",
+    "build": "microbundle src/index.tsx -o dist/index.js --external react,preact",
     "prepare": "npm run build"
   },
   "repository": {
@@ -46,11 +46,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/plugin-transform-react-jsx": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-react-jsx": "^7.9.4",
+    "@babel/preset-env": "^7.9.5",
     "microbundle": "^0.12.0-next.8",
-    "preact": "^10.2.1"
+    "preact": "^10.4.1"
   },
   "peerDependenciesMeta": {
     "preact": {
