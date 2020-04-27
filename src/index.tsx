@@ -1,22 +1,28 @@
-import { h, Component } from "preact";
+import { h, Component, ComponentConstructor, AnyComponent, cloneElement, createElement } from "preact";
 
 let language = "en";
-let listeners: Function[] = [];
+type Listener = {
+    (lang: string): void
+}
+let listeners: Listener[] = [];
 
-export function subscribe(listener: Function) {
+export function subscribe(listener: Listener) {
     listeners.push(listener);
     return () => { unsubscribe(listener); };
 }
-function unsubscribe(cb: Function) {
-    listeners.splice(listeners.indexOf(cb)>>>0, 1);
+export function unsubscribe(listener: Listener) {
+    listeners.splice(listeners.indexOf(listener)>>>0, 1);
 }
 
-type Strings = {
-    [key: string]: string|Function
+type StringFunction = {
+    (...params: any): string
+}
+export type StringValue = {
+    [key: string]: string | StringFunction
 };
 
-export function mergeStrings(strings: Strings = {}, newStrings: Strings[]) {
-    for (let texts of newStrings) {
+function mergeStrings(strings: StringValue, newStrings: StringValue[]) {
+    for (const texts of newStrings) {
         if (typeof texts.default === "object") {
             Object.assign(strings, texts.default);
         } else {
@@ -28,7 +34,7 @@ export function mergeStrings(strings: Strings = {}, newStrings: Strings[]) {
 
 export function changeLanguage(newLanguage: string) {
     language = newLanguage;
-    for (let listener of listeners) {
+    for (const listener of listeners) {
         listener(newLanguage);
     }
 }
@@ -36,64 +42,41 @@ export function currentLanguage() {
     return language;
 }
 
+export function connectLanguage(locales: {[key: string]: () => Promise<any>[]}) {
+    const strings: StringValue = {};
+    let languageLoaded = false;
+    const components: any = [];
 
-export function localize(locales: {[language: string]: Function}): {
-    activeLocale: Strings,
-    languages: typeof locales
-} {
-    return {
-        activeLocale: {},
-        languages: locales
-    };
-}
+    subscribe(setLanguage);
 
-export type LanguageProps = {
-    string: Strings
-}
+    setLanguage(currentLanguage());
 
-// export function connectLanguage(Child: VNode<typeof locales>, locales: ReturnType<typeof localize>) {
-export function connectLanguage(
-    Child: any,
-    locales: ReturnType<typeof localize>
-) {
-    return class Wrapper extends Component<{}, {languageLoaded: boolean}> {
-        unsubscribe: Function;
-        constructor() {
-            super();
-            this.state = {
-                languageLoaded: false
+    async function setLanguage(language: string) {
+        const locale = locales[language] || locales["en"];
+        mergeStrings(strings, await Promise.all(locale()));
+        languageLoaded = true;
+        for (const component of components) {
+            component.setState({});
+        }
+    }
+    function unmount(component: any) {
+        components.splice(components.indexOf(component)>>>0, 1);
+        if (!components.length) {
+            unsubscribe(setLanguage);
+        }
+    }
+
+    return function<T>(Child: any) {
+        return class Wrapper extends Component<T> {
+            componentWillUnmount() {
+                unmount(this);
             };
-            this.unsubscribe = subscribe((newLanguage: string) => {
-                this.setLanguage(newLanguage);
-            });
+            componentWillMount() {
+                components.push(this);
+            };
+            render() {
+                return languageLoaded && <Child {...this.props} string={strings} />;
+            };
         }
-        
-        async setLanguage(language: string) {
-            if (!locales.languages[language]) {
-                // TODO: set/get default language
-                language = "en";
-            }
-            mergeStrings(locales.activeLocale, await Promise.all(locales.languages[language]()));
-            this.setState({languageLoaded: true});
-        }
-        string(id: string, ...params: any) {
-            const activeLocale = locales.activeLocale[id];
-            if (typeof activeLocale === "function") {
-                return activeLocale(...params);
-            }
-            return locales.activeLocale[id];
-        }
-        componentWillUnmount() {
-            if (this.unsubscribe) {
-                this.unsubscribe();
-            }
-        };
-        componentWillMount() {
-            const language = currentLanguage();
-            this.setLanguage(language);
-        };
-        render() {
-            return this.state.languageLoaded && <Child {...this.props} string={this.string} />;
-        };
     }
 }

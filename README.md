@@ -16,26 +16,24 @@ export default {
 }
 
 // App.js
-import connectLanguage, { localize, changeLanguage } from "preact-i18n-weedz";
+import connectLanguage, { changeLanguage } from "preact-i18n-weedz";
 
-const locales = localize({
+const locales = {
     "en": () => [import("./en.js")],
     "sv": () => [import("./sv.js")],
     // this also works
     // "en": () => [{
     //     "string-id": "EN"
     // }]
-});
-
-function wrapper(child) {
-    return connectLanguage(child, locales);
 }
+
+const wrapper = connectLanguage(locales);
 
 function App(props) {
     return (
         <input onclick={() => changeLanguage("sv")} value="Change language">
-        <p>{this.props.string("string-id")}</p>
-        <p>{this.props.string("string-param", "Hello World!")}</p>
+        <p>{this.props.string["string-id"]}</p>
+        <p>{this.props.string["string-param"]("Hello World!")}</p>
     )
 }
 
