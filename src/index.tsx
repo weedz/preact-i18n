@@ -1,4 +1,4 @@
-import { h, Component, ComponentConstructor, AnyComponent, cloneElement, createElement } from "preact";
+import { h, Component, ComponentConstructor, AnyComponent } from "preact";
 
 let language = "en";
 type Listener = {
@@ -12,6 +12,10 @@ export function subscribe(listener: Listener) {
 }
 export function unsubscribe(listener: Listener) {
     listeners.splice(listeners.indexOf(listener)>>>0, 1);
+}
+
+export interface StringProps<T = StringValue> {
+    string?: T
 }
 
 type StringFunction = {
@@ -66,7 +70,7 @@ export function connectLanguage(locales: {[key: string]: () => Promise<any>[]}) 
         }
     }
 
-    return function<T>(Child: any) {
+    return function<T = {}, S = {}>(Child: ComponentConstructor<T, S> | AnyComponent<T, S>) {
         return class Wrapper extends Component<T> {
             componentWillUnmount() {
                 unmount(this);
@@ -75,6 +79,8 @@ export function connectLanguage(locales: {[key: string]: () => Promise<any>[]}) 
                 components.push(this);
             };
             render() {
+                // TODO: Fix this.
+                // @ts-ignore
                 return languageLoaded && <Child {...this.props} string={strings} />;
             };
         }

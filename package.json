@@ -46,9 +46,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "^7.9.6",
     "@babel/plugin-transform-react-jsx": "^7.9.4",
-    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-env": "^7.9.6",
     "microbundle": "^0.12.0-next.8",
     "preact": "^10.4.1"
   },
