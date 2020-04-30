@@ -1,6 +1,6 @@
 {
-  "name": "preact-i18n-weedz",
-  "version": "1.0.0",
+  "name": "@weedzcokie/i18n-preact",
+  "version": "0.1.0",
   "description": "",
   "source": "src/index.tsx",
   "main": "dist/index.js",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/weedz/preact-i18n.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Linus Björklund <weedzcokie@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/weedz/preact-i18n/issues"
