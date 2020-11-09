@@ -1,4 +1,4 @@
-import { h, Component, ComponentConstructor, AnyComponent } from "preact";
+import { h, Component, AnyComponent } from "preact";
 
 let language = "en";
 type Listener = {
@@ -14,8 +14,8 @@ export function unsubscribe(listener: Listener) {
     listeners.splice(listeners.indexOf(listener)>>>0, 1);
 }
 
-export interface StringProps<T = StringValue> {
-    string?: T
+export interface LanguageProps<T = StringValue> {
+    string: T
 }
 
 type StringFunction = {
@@ -46,7 +46,12 @@ export function currentLanguage() {
     return language;
 }
 
-export function connectLanguage(locales: {[key: string]: () => Promise<any>[]}) {
+/*
+L = LanguageProps<L>, key=value of available strings
+P = Props without L
+S = State
+*/
+export function connectLanguage<L>(locales: {[key: string]: () => Promise<any>[]}) {
     const strings: StringValue = {};
     let languageLoaded = false;
     const components: any = [];
@@ -70,8 +75,8 @@ export function connectLanguage(locales: {[key: string]: () => Promise<any>[]}) 
         }
     }
 
-    return function<T = {}, S = {}>(Child: ComponentConstructor<T, S> | AnyComponent<T, S>) {
-        return class Wrapper extends Component<T> {
+    return function<P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>) {
+        return class Wrapper extends Component<P> {
             componentWillUnmount() {
                 unmount(this);
             };

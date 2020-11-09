@@ -2,7 +2,7 @@
 
 ## Example
 
-```js
+```tsx
 // en.js
 export default {
     "string-id": "EN",
@@ -15,8 +15,8 @@ export default {
     "string-param": (param) => `${param}, SV`
 }
 
-// App.js
-import connectLanguage, { changeLanguage } from "preact-i18n-weedz";
+// App.tsx
+import Wrapper, { changeLanguage, LanguageProps } from "preact-i18n-weedz";
 
 const locales = {
     "en": () => [import("./en.js")],
@@ -27,15 +27,20 @@ const locales = {
     // }]
 }
 
-const wrapper = connectLanguage(locales);
+type StringValues = typeof import("./en").default;
 
-function App(props) {
+const wrapper = Wrapper<StringValues>(locales);
+
+type Props = {};
+function App(props: Props & LanguageProps<StringValues>) {
     return (
-        <input onclick={() => changeLanguage("sv")} value="Change language">
-        <p>{this.props.string["string-id"]}</p>
-        <p>{this.props.string["string-param"]("Hello World!")}</p>
+        <div>
+            <input onclick={() => changeLanguage("sv")} value="Change language">
+            <p>{this.props.string["string-id"]}</p>
+            <p>{this.props.string["string-param"]("Hello World!")}</p>
+        </div>
     )
 }
 
-export default wrapper(App);
+export default wrapper<Props>(App);
 ```
