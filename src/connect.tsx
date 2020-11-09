@@ -76,7 +76,7 @@ export function connectLanguage<L>(locales: {[key: string]: () => Promise<any>[]
     }
 
     function string(key: keyof L) {
-        return (strings as unknown as any)[key];
+        return (strings as unknown as L)[key];
     }
 
     return function<P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>) {
