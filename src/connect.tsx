@@ -15,7 +15,7 @@ export function unsubscribe(listener: Listener) {
 }
 
 export interface LanguageProps<T = StringValue> {
-    string: T
+    readonly string: <K extends keyof T>(key: K) => T[K]
 }
 
 type StringFunction = {
@@ -75,6 +75,10 @@ export function connectLanguage<L>(locales: {[key: string]: () => Promise<any>[]
         }
     }
 
+    function string(key: keyof L) {
+        return (strings as unknown as any)[key];
+    }
+
     return function<P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>) {
         return class Wrapper extends Component<P> {
             componentWillUnmount() {
@@ -86,7 +90,7 @@ export function connectLanguage<L>(locales: {[key: string]: () => Promise<any>[]
             render() {
                 // TODO: Fix this.
                 // @ts-ignore
-                return languageLoaded && <Child {...this.props} string={strings} />;
+                return languageLoaded && <Child {...this.props} string={string} />;
             };
         }
     }
