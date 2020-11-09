@@ -16,7 +16,7 @@ export default {
 }
 
 // App.tsx
-import Wrapper, { changeLanguage, LanguageProps } from "preact-i18n-weedz";
+import { Wrapper, changeLanguage, LanguageProps } from "preact-i18n-weedz";
 
 const locales = {
     "en": () => [import("./en.js")],
