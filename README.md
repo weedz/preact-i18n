@@ -36,8 +36,8 @@ function App(props: Props & LanguageProps<StringValues>) {
     return (
         <div>
             <input onclick={() => changeLanguage("sv")} value="Change language">
-            <p>{this.props.string["string-id"]}</p>
-            <p>{this.props.string["string-param"]("Hello World!")}</p>
+            <p>{this.props.str("string-id")}</p>
+            <p>{this.props.str("string-param")("Hello World!")}</p>
         </div>
     )
 }

@@ -15,7 +15,7 @@ export function unsubscribe(listener: Listener) {
 }
 
 export interface LanguageProps<T = StringValue> {
-    readonly string: <K extends keyof T>(key: K) => T[K]
+    readonly str: <K extends keyof T>(key: K) => T[K]
 }
 
 type StringFunction = {
@@ -90,7 +90,7 @@ export function connectLanguage<L>(locales: {[key: string]: () => Promise<any>[]
             render() {
                 // TODO: Fix this.
                 // @ts-ignore
-                return languageLoaded && <Child {...this.props} string={string} />;
+                return languageLoaded && <Child {...this.props} str={string} />;
             };
         }
     }
