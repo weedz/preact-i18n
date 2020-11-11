@@ -24,6 +24,9 @@ type StringFunction = {
 export type StringValue = {
     [key: string]: string | StringFunction
 };
+export type Locales = {
+    [locale: string]: () => Promise<any>[]
+}
 
 function mergeStrings(strings: StringValue, newStrings: StringValue[]) {
     for (const texts of newStrings) {
@@ -34,6 +37,15 @@ function mergeStrings(strings: StringValue, newStrings: StringValue[]) {
         }
     }
     return strings;
+}
+
+function mergeLocales(locales: {[locale: string]: Array<() => Promise<any>[]>}, newLocales: Locales){
+    for (const locale of Object.keys(newLocales)) {
+        if (!locales[locale]) {
+            locales[locale] = [];
+        }
+        locales[locale].push(newLocales[locale]);
+    }
 }
 
 export function changeLanguage(newLanguage: string) {
@@ -51,18 +63,23 @@ L = LanguageProps<L>, key=value of available strings
 P = Props without L
 S = State
 */
-export function connectLanguage<L>(locales: {[key: string]: () => Promise<any>[]}) {
+export function connectLanguage<L>(locales: Locales) {
     const strings: StringValue = {};
     let languageLoaded = false;
     const components: any = [];
+
+    const rootLocales: {[locale: string]: Array<() => Promise<any>[]>} = {};
+    mergeLocales(rootLocales, locales);
 
     subscribe(setLanguage);
 
     setLanguage(currentLanguage());
 
     async function setLanguage(language: string) {
-        const locale = locales[language] || locales["en"];
-        mergeStrings(strings, await Promise.all(locale()));
+        const locales = rootLocales[language] || rootLocales["en"];
+        for (const locale of locales) {
+            mergeStrings(strings, await Promise.all(locale()));
+        }
         languageLoaded = true;
         for (const component of components) {
             component.setState({});
@@ -79,7 +96,10 @@ export function connectLanguage<L>(locales: {[key: string]: () => Promise<any>[]
         return (strings as unknown as L)[key];
     }
 
-    return function<P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>) {
+    return function<P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>, componentLocales?: Locales) {
+        if (componentLocales) {
+            mergeLocales(rootLocales, componentLocales);
+        }
         return class Wrapper extends Component<P> {
             componentWillUnmount() {
                 unmount(this);

@@ -1,9 +1,9 @@
 import { AnyComponent } from "preact";
-import { LanguageProps } from "./connect";
+import { LanguageProps, Locales } from "./connect";
 import { connectLanguage } from "./connect";
 
-export function Wrapper<L>(locales: {[key: string]: () => Promise<any>[]}) {
+export function Wrapper<L>(locales: Locales) {
     const connect = connectLanguage<L>(locales);
 
-    return <P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>) => connect<P, S>(Child);
+    return <P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>, componentLocales?: Locales) => connect<P, S>(Child, componentLocales);
 }
