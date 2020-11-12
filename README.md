@@ -16,7 +16,7 @@ export default {
 }
 
 // App.tsx
-import { Wrapper, changeLanguage, LanguageProps } from "preact-i18n-weedz";
+import { WrapLanguage, changeLanguage, LanguageProps } from "preact-i18n-weedz";
 
 const locales = {
     "en": () => [import("./en.js")],
@@ -29,7 +29,7 @@ const locales = {
 
 type StringValues = typeof import("./en").default;
 
-const wrapper = Wrapper<StringValues>(locales);
+const Wrapper = WrapLanguage<StringValues>(locales);
 
 type Props = {};
 function App(props: Props & LanguageProps<StringValues>) {
@@ -42,5 +42,5 @@ function App(props: Props & LanguageProps<StringValues>) {
     )
 }
 
-export default wrapper<Props>(App);
+export default Wrapper<Props>(App);
 ```

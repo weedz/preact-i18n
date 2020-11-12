@@ -1,2 +1,2 @@
-export { Wrapper } from "./wrapper";
+export { WrapLanguage } from "./wrapper";
 export * from "./connect";
