@@ -1,4 +1,4 @@
-import { h, Component, AnyComponent } from "preact";
+import { h, Component, AnyComponent, ComponentConstructor } from "preact";
 
 let language = "en";
 type Listener = {
@@ -17,6 +17,8 @@ export function unsubscribe(listener: Listener) {
 export interface LanguageProps<T = StringValue> {
     readonly str: <K extends keyof T>(key: K) => T[K]
 }
+
+export type WrapTarget<L = unknown, P = unknown, S = unknown> = AnyComponent<P & LanguageProps<L>, S> | ComponentConstructor<P & LanguageProps<L>, S>;
 
 type StringFunction = {
     (...params: any): string
@@ -92,11 +94,11 @@ export function connectLanguage<L>(locales: Locales) {
         }
     }
 
-    function string(key: keyof L) {
-        return (strings as unknown as L)[key];
+    function string(key: string) {
+        return strings[key];
     }
-
-    return function<P = unknown, S = unknown>(Child: AnyComponent<P & LanguageProps<L>, S>, componentLocales?: Locales) {
+    
+    return function<P = unknown, S = unknown, ComponentLocales = unknown>(Child: WrapTarget<L & ComponentLocales, P, S>, componentLocales?: Locales) {
         if (componentLocales) {
             mergeLocales(rootLocales, componentLocales);
         }
@@ -112,6 +114,6 @@ export function connectLanguage<L>(locales: Locales) {
                 // @ts-ignore
                 return languageLoaded && <Child {...this.props} str={string} />;
             };
-        }
+        } as ComponentConstructor<P>
     }
 }
