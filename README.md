@@ -1,5 +1,7 @@
 # preact-i18n
 
+[![npm](https://img.shields.io/npm/v/@weedzcokie/i18n-preact?style=flat-square)](https://www.npmjs.com/package/@weedzcokie/i18n-preact)
+
 ## Example
 
 ```tsx
