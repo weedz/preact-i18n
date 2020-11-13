@@ -27,10 +27,14 @@ export type StringValue = {
     [key: string]: string | StringFunction
 };
 export type Locales = {
-    [locale: string]: () => Promise<any>[]
+    [locale: string]: () => Promise<{default: StringValue} | StringValue>[]
 }
 
-function mergeStrings(strings: StringValue, newStrings: StringValue[]) {
+type RootLocales = {
+    [locale: string]: Array<() => Promise<{default: StringValue} | StringValue>[]>
+}
+
+function mergeStrings(strings: StringValue, newStrings: Array<{default: StringValue} | StringValue>) {
     for (const texts of newStrings) {
         if (typeof texts.default === "object") {
             Object.assign(strings, texts.default);
@@ -41,7 +45,7 @@ function mergeStrings(strings: StringValue, newStrings: StringValue[]) {
     return strings;
 }
 
-function mergeLocales(locales: {[locale: string]: Array<() => Promise<any>[]>}, newLocales: Locales){
+function mergeLocales(locales: RootLocales, newLocales: Locales){
     for (const locale of Object.keys(newLocales)) {
         if (!locales[locale]) {
             locales[locale] = [];
@@ -68,9 +72,9 @@ S = State
 export function connectLanguage<L>(locales: Locales) {
     const strings: StringValue = {};
     let languageLoaded = false;
-    const components: any = [];
+    const components: Component[] = [];
 
-    const rootLocales: {[locale: string]: Array<() => Promise<any>[]>} = {};
+    const rootLocales: RootLocales = {};
     mergeLocales(rootLocales, locales);
 
     subscribe(setLanguage);
@@ -87,7 +91,7 @@ export function connectLanguage<L>(locales: Locales) {
             component.setState({});
         }
     }
-    function unmount(component: any) {
+    function unmount(component: Component) {
         components.splice(components.indexOf(component)>>>0, 1);
         if (!components.length) {
             unsubscribe(setLanguage);
