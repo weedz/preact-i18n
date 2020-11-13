@@ -106,7 +106,7 @@ export function connectLanguage<L>(locales: Locales) {
             componentWillUnmount() {
                 unmount(this);
             };
-            componentWillMount() {
+            componentDidMount() {
                 components.push(this);
             };
             render() {
