@@ -24,7 +24,7 @@ type StringFunction = {
     (...params: any): string
 }
 export type StringValue = {
-    [key: string]: string | StringFunction
+    [key: string]: string | StringFunction | AnyComponent | ComponentConstructor
 };
 export type Locales = {
     [locale: string]: () => Promise<{default: StringValue} | StringValue>[]
