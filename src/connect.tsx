@@ -24,14 +24,14 @@ type StringFunction = {
     (...params: any): string
 }
 export type StringValue = {
-    [key: string]: string | StringFunction | AnyComponent | ComponentConstructor
+    [key: string]: string | StringFunction | ((props: any) => h.JSX.Element)
 };
 export type Locales = {
-    [locale: string]: () => Promise<{default: StringValue} | StringValue>[]
+    [locale: string]: () => Array<StringValue | Promise<{default: StringValue} | StringValue>>
 }
 
 type RootLocales = {
-    [locale: string]: Array<() => Promise<{default: StringValue} | StringValue>[]>
+    [locale: string]: Array<() => Array<StringValue | Promise<{default: StringValue} | StringValue>>>
 }
 
 function mergeStrings(strings: StringValue, newStrings: Array<{default: StringValue} | StringValue>) {
@@ -118,6 +118,6 @@ export function connectLanguage<L>(locales: Locales) {
                 // @ts-ignore
                 return languageLoaded && <Child {...this.props} str={string} />;
             };
-        } as ComponentConstructor<P>
+        };
     }
 }

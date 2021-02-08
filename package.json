@@ -1,6 +1,6 @@
 {
   "name": "@weedzcokie/i18n-preact",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -11,7 +11,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -r dist; tsc",
-    "prepublish": "npm run build"
+    "dev": "tsc -w",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
