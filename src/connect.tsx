@@ -1,4 +1,4 @@
-import { h, Component, AnyComponent, ComponentConstructor } from "preact";
+import { h, Component, ComponentClass } from "preact";
 
 let language = "en";
 type Listener = {
@@ -14,11 +14,12 @@ export function unsubscribe(listener: Listener) {
     listeners.splice(listeners.indexOf(listener)>>>0, 1);
 }
 
-export interface LanguageProps<T = StringValue> {
-    readonly str: <K extends keyof T>(key: K) => T[K]
+export interface LanguageProps<L extends StringValue> {
+    readonly str: <K extends keyof L>(key: K) => L[K]
+    readonly isStr: (key: any) => key is keyof L
 }
 
-export type WrapTarget<L = unknown, P = unknown, S = unknown> = AnyComponent<P & LanguageProps<L>, S> | ComponentConstructor<P & LanguageProps<L>, S>;
+export type WrapTarget<L extends StringValue, P = unknown, S = unknown> = ComponentClass<P & LanguageProps<L>, S>;
 
 type StringFunction = {
     (...params: any): string
@@ -69,7 +70,7 @@ L = LanguageProps<L>, key=value of available strings
 P = Props without L
 S = State
 */
-export function connectLanguage<L>(locales: Locales) {
+export function connectLanguage<L extends StringValue>(locales: Locales) {
     const strings: StringValue = {};
     let languageLoaded = false;
     const components: Component[] = [];
@@ -98,8 +99,11 @@ export function connectLanguage<L>(locales: Locales) {
         }
     }
 
-    function string(key: string) {
-        return strings[key];
+    function string(key: keyof L) {
+        return strings[key as any];
+    }
+    function is_str(key: any): key is keyof L {
+        return key in strings;
     }
     
     return function<P = unknown, S = unknown, ComponentLocales = unknown>(Child: WrapTarget<L & ComponentLocales, P, S>, componentLocales?: Locales) {
@@ -114,9 +118,8 @@ export function connectLanguage<L>(locales: Locales) {
                 components.push(this);
             };
             render() {
-                // TODO: Fix this.
                 // @ts-ignore
-                return languageLoaded && <Child {...this.props} str={string} />;
+                return languageLoaded && <Child {...this.props} str={string} isStr={is_str} />;
             };
         };
     }
