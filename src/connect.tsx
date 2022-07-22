@@ -4,7 +4,7 @@ let language = "en";
 type Listener = {
     (lang: string): void
 }
-let listeners: Listener[] = [];
+const listeners: Listener[] = [];
 
 export function subscribe(listener: Listener) {
     listeners.push(listener);
@@ -16,26 +16,26 @@ export function unsubscribe(listener: Listener) {
 
 export interface LanguageProps<L extends StringValue> {
     readonly str: <K extends keyof L>(key: K) => L[K]
-    readonly isStr: (key: any) => key is keyof L
+    readonly isStr: (key: unknown) => key is keyof L
 }
 
 export type WrapTarget<L extends StringValue, P = unknown> = ComponentClass<P & LanguageProps<L>> | FunctionComponent<P & LanguageProps<L>>;
 
 type StringFunction = {
-    (...params: any): string
+    (...params: unknown[]): string
 }
 export type StringValue = {
-    [key: string]: string | StringFunction | ((props: any) => h.JSX.Element)
+    [key: string]: string | StringFunction | FunctionComponent<unknown>
 };
-export type Locales = {
-    [locale: string]: () => Array<StringValue | Promise<{default: StringValue} | StringValue>>
+export type Locales<L extends StringValue> = {
+    [locale: string]: () => Array<L | Promise<{default: L} | L>>
 }
 
-type RootLocales = {
-    [locale: string]: Array<() => Array<StringValue | Promise<{default: StringValue} | StringValue>>>
+type RootLocales<L extends StringValue> = {
+    [locale: string]: Array<() => Array<L | Promise<{default: L} | L>>>
 }
 
-function mergeStrings(strings: StringValue, newStrings: Array<{default: StringValue} | StringValue>) {
+function mergeStrings<L extends StringValue>(strings: L, newStrings: Array<{default: L} | L>) {
     for (const texts of newStrings) {
         if (typeof texts.default === "object") {
             Object.assign(strings, texts.default);
@@ -46,7 +46,7 @@ function mergeStrings(strings: StringValue, newStrings: Array<{default: StringVa
     return strings;
 }
 
-function mergeLocales(locales: RootLocales, newLocales: Locales){
+function mergeLocales<L extends StringValue>(locales: RootLocales<L>, newLocales: Locales<L>){
     for (const locale of Object.keys(newLocales)) {
         if (!locales[locale]) {
             locales[locale] = [];
@@ -70,12 +70,12 @@ L = LanguageProps<L>, key=value of available strings
 P = Props without L
 S = State
 */
-export function connectLanguage<L extends StringValue>(locales: Locales) {
+export function connectLanguage<L extends StringValue>(locales: Locales<L>) {
     const strings: StringValue = {};
     let languageLoaded = false;
     const components: Component[] = [];
 
-    const rootLocales: RootLocales = {};
+    const rootLocales: RootLocales<L> = {};
     mergeLocales(rootLocales, locales);
 
     subscribe(setLanguage);
@@ -100,23 +100,23 @@ export function connectLanguage<L extends StringValue>(locales: Locales) {
     }
 
     function string<K extends keyof L>(key: K) {
-        return strings[key as any] as L[K];
+        return strings[key as keyof StringValue] as L[K];
     }
-    function is_str(key: any): key is keyof L {
-        return key in strings;
+    function is_str(key: unknown): key is keyof L {
+        return key as string in strings;
     }
     
     return function<P = unknown>(Child: WrapTarget<L, P>): ComponentConstructor<P> {
         return class Wrapper extends Component<P> {
             componentWillUnmount() {
                 unmount(this);
-            };
+            }
             componentDidMount() {
                 components.push(this);
-            };
+            }
             render() {
                 return languageLoaded && <Child {...this.props} str={string} isStr={is_str} />;
-            };
+            }
         };
     }
 }
