@@ -39,7 +39,7 @@ function unmount(component: Component) {
     components.splice(components.indexOf(component)>>>0, 1);
 }
 
-export function connectLanguage<P = unknown>(Child: WrapTarget<P>): ComponentConstructor<P> {
+export function withLanguage<P = unknown>(Child: WrapTarget<P>): ComponentConstructor<P> {
     return class Wrapper extends Component<P> {
         componentWillUnmount() {
             unmount(this);
