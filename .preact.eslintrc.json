@@ -1,55 +1,55 @@
-module.exports = {
+{
 	// We don"t use plugin:react/recommended here to avoid React-specific rules.
-	extends: [
-		"eslint:recommended",
+	"extends": [
+		"eslint:recommended"
 	],
 
-	plugins: [
-		"react",
+	"plugins": [
+		"react"
 		// "react-hooks"
 	],
 
-	env: {
-		browser: true,
-		es6: true,
-		node: true
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true
 	},
 
-	globals: {
-		expect: true,
-		browser: true,
-		global: true
+	"globals": {
+		"expect": true,
+		"browser": true,
+		"global": true
 	},
 
-	settings: {
-		react: {
+	"settings": {
+		"react": {
 			// eslint-plugin-preact interprets this as "h.createElement",
 			// however we only care about marking h() as being a used variable.
-			pragma: "h",
-			version: "18"
+			"pragma": "h",
+			"version": "18"
 		}
 	},
 
-	rules: {
+	"rules": {
 		/**
 		 * Preact / JSX rules
 		 */
 		"react/no-deprecated": 2,
 		"react/react-in-jsx-scope": 0, // handled this automatically
-		"react/display-name": [1, { ignoreTranspilerName: false }],
+		"react/display-name": [1, { "ignoreTranspilerName": false }],
 		"react/jsx-no-bind": [1, {
-			ignoreRefs: true,
-			allowFunctions: true,
-			allowArrowFunctions: true
+			"ignoreRefs": true,
+			"allowFunctions": true,
+			"allowArrowFunctions": true
 		}],
 		"react/jsx-no-comment-textnodes": 2,
 		"react/jsx-no-duplicate-props": 2,
 		"react/jsx-no-target-blank": 2,
 		"react/jsx-no-undef": 2,
-		"react/jsx-tag-spacing": [2, { beforeSelfClosing: "always" }],
+		"react/jsx-tag-spacing": [2, { "beforeSelfClosing": "always" }],
 		"react/jsx-uses-react": 2, // debatable
 		"react/jsx-uses-vars": 2,
-		"react/jsx-key": [2, { checkFragmentShorthand: true }],
+		"react/jsx-key": [2, { "checkFragmentShorthand": true }],
 		"react/self-closing-comp": 2,
 		"react/prefer-es6-class": 2,
 		"react/prefer-stateless-function": 1,
@@ -106,8 +106,8 @@ module.exports = {
 		/**
 		 * General JavaScript stylistic rules (disabled)
 		 */
-		semi: 0,
-		strict: [2, "never"], // assume type=module output (cli default)
+		"semi": 0,
+		"strict": [2, "never"], // assume type=module output (cli default)
 		"object-curly-spacing": [0, "always"],
 		"rest-spread-spacing": 0,
 		"space-before-function-paren": [0, "always"],
@@ -117,12 +117,12 @@ module.exports = {
 		"prefer-rest-params": 1,
 		"prefer-spread": 1,
 		"prefer-template": 1,
-		quotes: [0, "double", {
-			avoidEscape: true,
-			allowTemplateLiterals: true
+		"quotes": [0, "double", {
+			"avoidEscape": true,
+			"allowTemplateLiterals": true
 		}],
 		"quote-props": [2, "as-needed"],
-		radix: 1, // parseInt(x, 10)
+		"radix": 1, // parseInt(x, 10)
 		"unicode-bom": 2,
 		"valid-jsdoc": 0,
 
@@ -135,6 +135,6 @@ module.exports = {
 			"argsIgnorePattern": "^_"
 		}],
 		"no-useless-constructor": "off",
-		"@typescript-eslint/no-useless-constructor": ["error"],
+		"@typescript-eslint/no-useless-constructor": ["error"]
 	}
-};
+}
