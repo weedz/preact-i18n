@@ -19,8 +19,12 @@
     "type": "git",
     "url": "git+https://github.com/weedz/preact-i18n.git"
   },
-  "keywords": [],
-  "author": "Linus Björklund <weedzcokie@gmail.com>",
+  "keywords": [
+    "preact",
+    "i18n",
+    "internationalization"
+  ],
+  "author": "Linus Björklund",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/weedz/preact-i18n/issues"
