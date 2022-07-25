@@ -59,7 +59,7 @@ export default withLanguage(App);
 }
 ```
 
-`@types/@weedzcokie/preact-i18n.d.ts`:
+`@types/@weedzcokie/i18n-preact.d.ts`:
 ```typescript
 import { locales } from "src/i18n";
 import ns1 from "src/i18n/en";
@@ -87,7 +87,7 @@ export default {
 export default {
     "string-id": "SV",
     "string-param": (param: string) => `${param}, SV`
-}
+} as typeof import("./en").default; // To make sure all strings are the correct type according to the "en" locale
 
 // src/i18n/index.ts
 import { storeLocale } from "@weedzcokie/i18n-preact";
@@ -121,7 +121,7 @@ export default withLanguage(App);
 
 #### `preact-router`
 
-With `preact-router` we need to declare "routable" components as:
+With `preact-router` we can to declare "routable" components as:
 ```tsx
 // src/About.tsx
 import type { LanguageProps } from "@weedzcokie/i18n-preact";
