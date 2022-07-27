@@ -1,7 +1,5 @@
 import { h, Component, ComponentClass, FunctionComponent, ComponentConstructor } from "preact";
-import { is_str, Locales, mergeLocales, setLanguage, string } from "./utils";
-
-let language = "en";
+import { currentLanguage, is_str, Locales, mergeLocales, setLanguage, string, strings } from "./utils";
 
 export interface LanguageProps {
     readonly t: typeof string
@@ -10,26 +8,22 @@ export interface LanguageProps {
 
 export type WrapTarget<P = unknown> = ComponentClass<P & LanguageProps> | FunctionComponent<P & LanguageProps>;
 
-export function changeLanguage(newLanguage: string) {
-    language = newLanguage;
-    componentSetLanguage(language);
-}
-export function currentLanguage() {
-    return language;
-}
+let languageLoaded = false;
+const components: Component[] = [];
+const listeners: Array<(t: typeof strings) => void> = [];
 
 export function storeLocale(locales: Locales) {
     mergeLocales(locales);
-    componentSetLanguage(currentLanguage());
+    changeLanguage(currentLanguage());
 }
 
-let languageLoaded = false;
-const components: Component[] = [];
-
-async function componentSetLanguage(language: string) {
+export async function changeLanguage(language: string) {
     await setLanguage(language);
 
     languageLoaded = true;
+    for (const listener of listeners) {
+        listener(strings);
+    }
     for (const component of components) {
         component.forceUpdate();
     }
@@ -37,6 +31,12 @@ async function componentSetLanguage(language: string) {
 
 function unmount(component: Component) {
     components.splice(components.indexOf(component)>>>0, 1);
+}
+export function subscribe(cb: typeof listeners[0]) {
+    listeners.push(cb);
+}
+export function unsubscribe(cb: typeof listeners[0]) {
+    listeners.splice(listeners.indexOf(cb)>>>0, 1);
 }
 
 export function withLanguage<P = unknown>(Child: WrapTarget<P>): ComponentConstructor<P> {

@@ -3,6 +3,8 @@ import type { FunctionalComponent } from "preact";
 export const strings: StringValue = {};
 const rootLocales: RootLocales = {};
 
+let activeLanguage = "en";
+
 type StringFunction = {
     (...params: unknown[]): string
 }
@@ -45,9 +47,14 @@ export function mergeLocales(newLocales: Locales) {
     }
 }
 
-export async function setLanguage(language: string) {
-    const locales = rootLocales[language] || rootLocales["en"];
+export async function setLanguage(newLanguage: string) {
+    activeLanguage = newLanguage;
+    const locales = rootLocales[newLanguage] || rootLocales["en"];
     for (const locale of locales) {
         mergeStrings(strings, await Promise.all(locale()));
     }
+}
+
+export function currentLanguage() {
+    return activeLanguage;
 }

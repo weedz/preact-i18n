@@ -153,3 +153,25 @@ import { Route, Router } from "preact-router";
     <Route component={About} path="/about" msg="Test props" />
 </Router>
 ```
+
+### Hook
+
+```typescript
+import { useLanguage } from "@weedzcokie/i18n-preact";
+import "src/i18n"; // initialize locale store
+
+type Props = {
+    msg: string
+};
+
+function About(props: Props) {
+    const t = useLanguage();
+    return (
+        <div>
+            <h1>About</h1>
+            <p>{props.msg}</p>
+            <p>{t["string-id"]}</p>
+        </div>
+    );
+}
+```

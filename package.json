@@ -1,6 +1,6 @@
 {
   "name": "@weedzcokie/i18n-preact",
-  "version": "3.0.0-alpha.9",
+  "version": "3.0.0-alpha.15",
   "description": "Small internationalization library for use with preact",
   "source": "src/index.ts",
   "type": "module",
@@ -8,6 +8,9 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -r dist; tsc",
