@@ -1,5 +1,5 @@
 import { h, Component, ComponentClass, FunctionComponent, ComponentConstructor } from "preact";
-import { currentLanguage, is_str, Locales, mergeLocales, setLanguage, string, strings } from "./utils";
+import { currentLanguage, is_str, Locales, mergeLocales, setLanguage, string, strings } from "./utils.js";
 
 export interface LanguageProps {
     readonly t: typeof string

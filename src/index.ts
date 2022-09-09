@@ -1,3 +1,3 @@
-export type { StringValue, Locales } from "./utils";
-export * from "./connect";
-export { useLanguage } from "./hook";
+export type { StringValue, Locales } from "./utils.js";
+export * from "./connect.js";
+export { useLanguage } from "./hook.js";
