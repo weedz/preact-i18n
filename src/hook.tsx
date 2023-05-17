@@ -3,11 +3,11 @@ import { subscribe, unsubscribe } from "./connect.js";
 import { strings } from "./utils.js";
 
 export function useLanguage() {
-    const [t, setStrings] = useState<Readonly<typeof strings>>(strings);
+    const [currentState, setState] = useState(false);
 
     useEffect(() => {
-        function updateStrings(newStrings: typeof strings) {
-            setStrings(newStrings);
+        function updateStrings(_newStrings: typeof strings) {
+            setState(!currentState);
         }
         subscribe(updateStrings);
         return () => {
@@ -15,5 +15,5 @@ export function useLanguage() {
         }
     });
 
-    return t;
+    return strings as Readonly<typeof strings>;
 }

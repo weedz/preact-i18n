@@ -21,7 +21,7 @@
       "@typescript-eslint/no-useless-constructor": ["error"],
       "quotes": ["error"],
       "import/no-extraneous-dependencies": "error",
-      "import/no-unresolved": ["none"],
+      "import/no-unresolved": ["off"],
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-non-null-assertion": "error"
     },
