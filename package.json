@@ -13,11 +13,10 @@
     "./connect": "./dist/connect.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -r dist; tsc",
     "dev": "tsc -w",
     "prepublish": "npm run build",
-    "lint": "eslint ."
+    "lint": "oxlint -c .oxlintrc.json --tsconfig ./tsconfig.json -D correctness -D perf --import-plugin -D no-cycle --promise-plugin"
   },
   "repository": {
     "type": "git",
@@ -35,15 +34,12 @@
   },
   "homepage": "https://github.com/weedz/preact-i18n#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.59.6",
-    "@typescript-eslint/parser": "^5.59.6",
-    "eslint": "^8.40.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-react": "^7.32.2",
-    "preact": "^10.14.1",
-    "typescript": "^5.0.4"
+    "oxlint": "^0.10.3",
+    "preact": "^10.24.3",
+    "typescript": "^5.6.3"
   },
   "peerDependencies": {
     "preact": "^10.5.5"
-  }
+  },
+  "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
 }
