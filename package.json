@@ -1,6 +1,6 @@
 {
   "name": "@weedzcokie/i18n-preact",
-  "version": "3.0.0-alpha.21",
+  "version": "3.0.0-alpha.22",
   "description": "Small internationalization library for use with preact",
   "source": "src/index.ts",
   "type": "module",
