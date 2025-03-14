@@ -5,15 +5,13 @@ const rootLocales: RootLocales = {};
 
 let activeLanguage = "en";
 
-type StringFunction = {
-  (...params: unknown[]): string
-}
+type StringFunction = ((props: object) => any) | ((...params: any[]) => any);
 type Strings = () => Array<StringValue | Promise<{ default: StringValue } | StringValue>>;
 
-export type StringValue = {
+export interface StringValue {
   [key: string]: string | StringFunction | FunctionalComponent<unknown>
-};
-export type Locales = {
+}
+export interface Locales {
   [locale: string]: Strings
 }
 
